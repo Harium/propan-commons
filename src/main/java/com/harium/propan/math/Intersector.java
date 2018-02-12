@@ -9,6 +9,22 @@ public class Intersector {
 
     public final static float NO_COLLISION = -1;
 
+    // Based on code at: https://stackoverflow.com/a/4579069
+    public static boolean intersectBoundsSphereFast(BoundingBox box, Vector3 center, float radius) {
+        float dist_squared = radius * radius;
+        if (center.x < box.min.x) dist_squared -= squared(center.x - box.min.x);
+        else if (center.x > box.max.x) dist_squared -= squared(center.x - box.max.x);
+        if (center.y < box.min.y) dist_squared -= squared(center.y - box.min.y);
+        else if (center.y > box.max.y) dist_squared -= squared(center.y - box.max.y);
+        if (center.z < box.min.z) dist_squared -= squared(center.z - box.min.z);
+        else if (center.z > box.max.z) dist_squared -= squared(center.z - box.max.z);
+        return dist_squared > 0;
+    }
+
+    public static float squared(float x) {
+        return x * x;
+    }
+
     public static boolean intersectRayBoundsFast(Ray ray, BoundingBox aabb, Matrix4 matrix) {
         return intersectRayBounds(ray, aabb, matrix) != NO_COLLISION;
     }
